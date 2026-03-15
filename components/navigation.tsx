@@ -10,7 +10,7 @@ import { SettingsModal } from "./settings-modal"
 const navItems = [
   { href: "/", label: "Home", id: "home", icon: Home },
   { href: "/map", label: "Map", id: "map", icon: MapPin },
-  { href: "/blog", label: "Learning", id: "blog", icon: BookOpen },
+  { href: "/blog", label: "Explore", id: "blog", icon: BookOpen },
   { href: "/shop", label: "Shop", id: "shop", icon: ShoppingBag },
   { href: "/events", label: "Events", id: "events", icon: CalendarDays },
   { href: "/consultants", label: "Consult", id: "consultants", icon: Stethoscope },
