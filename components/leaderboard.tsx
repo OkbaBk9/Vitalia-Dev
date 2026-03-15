@@ -13,39 +13,40 @@ const friends = [
 export function Leaderboard() {
   return (
     <div className="glass-card border-2 border-border rounded-3xl p-4 sm:p-5 relative overflow-hidden">
-      {/* Decorative gradient */}
-      <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[var(--color-orange)]/10 to-transparent rounded-full blur-2xl pointer-events-none" />
+      {/* Decorative gradient - enhanced */}
+      <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[var(--color-orange)]/15 to-transparent rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 right-0 w-40 h-40 bg-gradient-to-bl from-primary/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-      <div className="flex items-center gap-2 mb-4 relative">
-        <div className="p-2 rounded-xl bg-[var(--color-orange)]/10">
+      <div className="flex items-center gap-2 mb-4 relative z-10">
+        <div className="p-2 rounded-xl bg-[var(--color-orange)]/10 backdrop-blur-sm border border-[var(--color-orange)]/20">
           <Trophy size={18} style={{ color: "var(--color-orange)" }} />
         </div>
         <h3 className="font-bold text-foreground">Weekly Leaderboard</h3>
       </div>
 
-      <div className="space-y-2 stagger-children">
+      <div className="space-y-2 stagger-children relative z-10">
         {friends.map((friend, index) => (
           <div
             key={friend.rank}
-            className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-300 hover:scale-[1.02] ${
+            className={`flex items-center gap-3 p-3 rounded-xl transition-all duration-300 hover:scale-[1.02] group ${
               friend.isYou
-                ? "glass border-2 border-primary/30 shadow-lg shadow-primary/10"
-                : "hover:bg-secondary/50"
+                ? "glass-card border border-primary/40 shadow-lg shadow-primary/15 hover:shadow-primary/25 hover:border-primary/50"
+                : "hover:bg-secondary/50 hover:backdrop-blur-sm"
             }`}
             style={{ animationDelay: `${index * 80}ms` }}
           >
             {/* Rank badge */}
             <div className="relative">
               {friend.rank === 1 ? (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--color-orange)] to-yellow-500 flex items-center justify-center shadow-lg animate-pulse-soft">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--color-orange)] to-yellow-500 flex items-center justify-center shadow-lg shadow-[var(--color-orange)]/30 animate-pulse-soft">
                   <Crown size={14} className="text-white" />
                 </div>
               ) : friend.rank === 2 ? (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center shadow-md">
                   <Medal size={14} className="text-white" />
                 </div>
               ) : friend.rank === 3 ? (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-600 to-amber-700 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-600 to-amber-700 flex items-center justify-center shadow-md">
                   <Medal size={14} className="text-white" />
                 </div>
               ) : (
@@ -57,10 +58,10 @@ export function Leaderboard() {
 
             {/* Avatar */}
             <div
-              className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-bold flex-shrink-0 transition-all ${
+              className={`w-10 h-10 rounded-xl flex items-center justify-center text-xs font-bold flex-shrink-0 transition-all duration-300 ${
                 friend.isYou
-                  ? "bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-lg shadow-primary/20"
-                  : "bg-secondary text-foreground"
+                  ? "bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-lg shadow-primary/30 group-hover:shadow-primary/50 group-hover:scale-110"
+                  : "bg-secondary text-foreground group-hover:scale-105"
               }`}
             >
               {friend.avatar}
@@ -81,10 +82,10 @@ export function Leaderboard() {
                   {friend.points.toLocaleString()} VP
                 </p>
                 <span
-                  className="text-[10px] px-1.5 py-0.5 rounded-full font-bold"
+                  className="text-[10px] px-1.5 py-0.5 rounded-full font-bold backdrop-blur-sm border border-[var(--color-blue)]/20"
                   style={{
                     color: "var(--color-blue)",
-                    backgroundColor: "color-mix(in srgb, var(--color-blue) 15%, transparent)",
+                    backgroundColor: "color-mix(in srgb, var(--color-blue) 12%, transparent)",
                   }}
                 >
                   Lv.{friend.level}
@@ -94,8 +95,8 @@ export function Leaderboard() {
 
             {/* Trend indicator */}
             <div
-              className={`p-1.5 rounded-lg ${
-                friend.trend === "up" ? "bg-primary/10" : "bg-destructive/10"
+              className={`p-1.5 rounded-lg transition-all duration-300 ${
+                friend.trend === "up" ? "bg-primary/10 group-hover:bg-primary/15" : "bg-destructive/10 group-hover:bg-destructive/15"
               }`}
             >
               {friend.trend === "up" ? (

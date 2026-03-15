@@ -91,16 +91,16 @@ export function Navigation() {
         } ${
           isAtTop
             ? "bg-transparent"
-            : "glass-nav"
+            : "glass-nav border-b border-border/40"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
           {/* Logo - Empty placeholder */}
-          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary via-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/25 group-hover:shadow-primary/40 transition-all duration-300 group-hover:scale-105 btn-bounce">
+          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group transition-all duration-300">
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary via-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/25 group-hover:shadow-primary/40 transition-all duration-300 group-hover:scale-110 group-hover:-translate-y-1 btn-bounce">
               {/* Empty logo placeholder */}
             </div>
-            <span className="font-bold text-lg text-foreground hidden sm:block tracking-tight">Vitalia</span>
+            <span className="font-bold text-lg text-foreground hidden sm:block tracking-tight transition-colors duration-300">Vitalia</span>
           </Link>
 
           {/* Desktop nav items */}
@@ -111,8 +111,8 @@ export function Navigation() {
                 href={href}
                 className={`relative flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-300 group btn-bounce ${
                   activeId === id
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                    ? "text-primary bg-primary/12 backdrop-blur-sm"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/40 hover:backdrop-blur-sm"
                 }`}
               >
                 <Icon size={16} className="transition-transform group-hover:scale-110" />
@@ -129,7 +129,7 @@ export function Navigation() {
             {/* Search */}
             <button
               onClick={() => setSearchOpen(true)}
-              className="hidden md:flex p-2.5 rounded-xl glass-button text-muted-foreground hover:text-foreground"
+              className="hidden md:flex p-2.5 rounded-xl glass-button text-muted-foreground hover:text-foreground transition-colors duration-300 hover:shadow-md"
             >
               <Search size={20} />
             </button>
@@ -143,13 +143,13 @@ export function Navigation() {
                 }}
                 className={`relative p-2.5 rounded-xl transition-all duration-300 btn-bounce ${
                   notificationsOpen
-                    ? "bg-primary/10 text-primary"
-                    : "glass-button text-muted-foreground hover:text-foreground"
+                    ? "bg-primary/15 text-primary shadow-md shadow-primary/20"
+                    : "glass-button text-muted-foreground hover:text-foreground hover:shadow-md"
                 }`}
               >
                 <Bell size={20} />
                 {hasNotification && (
-                  <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-destructive rounded-full">
+                  <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-destructive rounded-full shadow-sm shadow-destructive/50">
                     <span className="absolute inset-0 rounded-full bg-destructive animate-pulse-ring" />
                   </span>
                 )}
@@ -164,7 +164,7 @@ export function Navigation() {
             {/* Dark mode toggle */}
             <button
               onClick={toggleDarkMode}
-              className="hidden sm:flex p-2.5 rounded-xl glass-button text-muted-foreground hover:text-foreground btn-bounce"
+              className="hidden sm:flex p-2.5 rounded-xl glass-button text-muted-foreground hover:text-foreground btn-bounce transition-colors duration-300 hover:shadow-md"
             >
               {isDark ? <Sun size={20} /> : <Moon size={20} />}
             </button>
@@ -172,7 +172,7 @@ export function Navigation() {
             {/* Settings */}
             <button
               onClick={() => setSettingsOpen(true)}
-              className="hidden sm:flex p-2.5 rounded-xl glass-button text-muted-foreground hover:text-foreground btn-bounce"
+              className="hidden sm:flex p-2.5 rounded-xl glass-button text-muted-foreground hover:text-foreground btn-bounce transition-colors duration-300 hover:shadow-md"
             >
               <Settings size={20} className="transition-transform hover:rotate-90 duration-500" />
             </button>
@@ -184,44 +184,44 @@ export function Navigation() {
                   setProfileOpen(!profileOpen)
                   setNotificationsOpen(false)
                 }}
-                className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary via-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold text-sm cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 btn-bounce"
+                className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary via-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold text-sm cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-primary/40 hover:scale-110 hover:-translate-y-1 btn-bounce border border-primary/40"
               >
                 EB
               </button>
 
               {/* Profile dropdown menu */}
               {profileOpen && (
-                <div className="absolute top-full right-0 mt-2 w-72 glass-card rounded-2xl shadow-2xl overflow-hidden animate-scale-in z-50">
+                <div className="absolute top-full right-0 mt-2 w-72 glass-card rounded-2xl shadow-2xl overflow-hidden animate-scale-in z-50 border border-border/50">
                   {/* Profile header */}
                   <Link 
                     href="/profile" 
                     onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 p-4 hover:bg-secondary/50 transition-colors"
+                    className="flex items-center gap-3 p-4 hover:bg-white/30 dark:hover:bg-white/10 transition-colors duration-300 group"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
                       EB
                     </div>
                     <div className="flex-1">
                       <p className="font-bold text-foreground">Elmehdi B.</p>
                       <p className="text-xs text-muted-foreground">Level 12 Vitalian</p>
                     </div>
-                    <ChevronRight size={16} className="text-muted-foreground" />
+                    <ChevronRight size={16} className="text-muted-foreground group-hover:translate-x-1 transition-transform" />
                   </Link>
 
                   <div className="border-t border-border/50" />
 
                   {/* Stats row */}
                   <div className="grid grid-cols-3 gap-2 p-3">
-                    <div className="text-center p-2 rounded-xl bg-secondary/30">
-                      <p className="text-lg font-bold text-foreground">7</p>
+                    <div className="text-center p-2 rounded-xl bg-gradient-to-br from-primary/10 to-transparent backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all duration-300 cursor-pointer group">
+                      <p className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">7</p>
                       <p className="text-[10px] text-muted-foreground">Streak</p>
                     </div>
-                    <div className="text-center p-2 rounded-xl bg-secondary/30">
-                      <p className="text-lg font-bold text-foreground">2,650</p>
+                    <div className="text-center p-2 rounded-xl bg-gradient-to-br from-primary/10 to-transparent backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all duration-300 cursor-pointer group">
+                      <p className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">2,650</p>
                       <p className="text-[10px] text-muted-foreground">VP</p>
                     </div>
-                    <div className="text-center p-2 rounded-xl bg-secondary/30">
-                      <p className="text-lg font-bold text-foreground">4</p>
+                    <div className="text-center p-2 rounded-xl bg-gradient-to-br from-primary/10 to-transparent backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all duration-300 cursor-pointer group">
+                      <p className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">4</p>
                       <p className="text-[10px] text-muted-foreground">Badges</p>
                     </div>
                   </div>
@@ -233,20 +233,20 @@ export function Navigation() {
                     <Link 
                       href="/profile" 
                       onClick={() => setProfileOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-secondary/50 transition-colors"
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/30 dark:hover:bg-white/10 transition-colors duration-300 group"
                     >
-                      <User size={18} className="text-muted-foreground" />
+                      <User size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
                       <span className="text-sm font-medium text-foreground">View Profile</span>
                     </Link>
                     <button 
                       onClick={() => { setSettingsOpen(true); setProfileOpen(false) }}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-secondary/50 transition-colors"
+                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/30 dark:hover:bg-white/10 transition-colors duration-300 group"
                     >
-                      <Settings size={18} className="text-muted-foreground" />
+                      <Settings size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
                       <span className="text-sm font-medium text-foreground">Settings</span>
                     </button>
-                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-secondary/50 transition-colors">
-                      <HelpCircle size={18} className="text-muted-foreground" />
+                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/30 dark:hover:bg-white/10 transition-colors duration-300 group">
+                      <HelpCircle size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
                       <span className="text-sm font-medium text-foreground">Help Center</span>
                     </button>
                     <button 

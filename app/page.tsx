@@ -63,8 +63,8 @@ export default function Dashboard() {
             {/* Stats pills */}
             <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
               {/* Streak */}
-              <div className="flex items-center gap-2 glass-button px-3 sm:px-4 py-2 rounded-2xl btn-bounce cursor-pointer">
-                <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ backgroundColor: "color-mix(in srgb, var(--color-streak) 15%, transparent)" }}>
+              <div className="flex items-center gap-2 glass-button px-3 sm:px-4 py-2 rounded-2xl btn-bounce cursor-pointer group hover:scale-105 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="w-8 h-8 rounded-xl flex items-center justify-center backdrop-blur-sm transition-all group-hover:scale-110 duration-300" style={{ backgroundColor: "color-mix(in srgb, var(--color-streak) 20%, transparent)" }}>
                   <Flame size={16} style={{ color: "var(--color-streak)" }} className="animate-pulse-soft" />
                 </div>
                 <div>
@@ -74,8 +74,8 @@ export default function Dashboard() {
               </div>
               
               {/* VitaPoints */}
-              <div className="flex items-center gap-2 glass-button px-3 sm:px-4 py-2 rounded-2xl btn-bounce cursor-pointer">
-                <div className="w-8 h-8 rounded-xl bg-primary/15 flex items-center justify-center">
+              <div className="flex items-center gap-2 glass-button px-3 sm:px-4 py-2 rounded-2xl btn-bounce cursor-pointer group hover:scale-105 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="w-8 h-8 rounded-xl bg-primary/15 flex items-center justify-center backdrop-blur-sm transition-all group-hover:scale-110 duration-300">
                   <Zap size={16} className="text-primary" />
                 </div>
                 <div>
@@ -85,8 +85,8 @@ export default function Dashboard() {
               </div>
               
               {/* Level Badge */}
-              <Link href="/profile" className="hidden sm:flex items-center gap-2 glass-button px-4 py-2 rounded-2xl btn-bounce">
-                <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ backgroundColor: "color-mix(in srgb, var(--color-blue) 15%, transparent)" }}>
+              <Link href="/profile" className="hidden sm:flex items-center gap-2 glass-button px-4 py-2 rounded-2xl btn-bounce group hover:scale-105 shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="w-8 h-8 rounded-xl flex items-center justify-center backdrop-blur-sm transition-all group-hover:scale-110 duration-300" style={{ backgroundColor: "color-mix(in srgb, var(--color-blue) 20%, transparent)" }}>
                   <Award size={16} style={{ color: "var(--color-blue)" }} />
                 </div>
                 <div>
@@ -163,9 +163,12 @@ export default function Dashboard() {
             <ActiveChallenge />
             
             {/* Quick links card */}
-            <div className="glass-card rounded-2xl p-4 animate-fade-scale" style={{ animationDelay: "200ms" }}>
-              <h3 className="font-bold text-foreground mb-3 text-sm">Quick Actions</h3>
-              <div className="space-y-2">
+            <div className="glass-card rounded-2xl p-4 animate-fade-scale glass-hover relative overflow-hidden" style={{ animationDelay: "200ms" }}>
+              {/* Subtle gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent pointer-events-none opacity-0 hover:opacity-100 transition-opacity duration-500" />
+              
+              <h3 className="font-bold text-foreground mb-3 text-sm relative z-10">Quick Actions</h3>
+              <div className="space-y-2 relative z-10">
                 {[
                   { label: "View All Stats", href: "/profile", color: "var(--color-blue)" },
                   { label: "Join a Club", href: "/clubs", color: "var(--primary)" },
@@ -174,11 +177,11 @@ export default function Dashboard() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="flex items-center justify-between p-3 rounded-xl hover:bg-secondary/50 transition-all group btn-bounce"
+                    className="flex items-center justify-between p-3 rounded-xl hover:bg-secondary/70 hover:backdrop-blur-sm transition-all group btn-bounce duration-300"
                   >
                     <div className="flex items-center gap-3">
                       <div 
-                        className="w-2 h-2 rounded-full"
+                        className="w-2 h-2 rounded-full transition-transform group-hover:scale-150 duration-300"
                         style={{ backgroundColor: link.color }}
                       />
                       <span className="text-sm font-medium text-foreground">{link.label}</span>

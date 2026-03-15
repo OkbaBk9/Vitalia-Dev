@@ -75,11 +75,14 @@ export function HealthMetrics() {
           return (
             <Card
               key={metric.label}
-              className="rounded-2xl glass-card border-0 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] group cursor-pointer animate-fade-scale btn-bounce"
+              className="rounded-2xl glass-card border-0 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 hover:scale-[1.02] group cursor-pointer animate-fade-scale btn-bounce glass-hover"
               style={{ animationDelay: `${index * 80}ms` }}
             >
-              <div className="p-6 h-full flex flex-col">
-                <div className="flex items-start justify-between mb-4">
+              <div className="p-6 h-full flex flex-col relative overflow-hidden">
+                {/* Subtle gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="flex items-start justify-between mb-4 relative z-10">
                   <div className="flex-1">
                     <p className="text-xs font-medium text-muted-foreground mb-1 uppercase tracking-wide">
                       {metric.label}
@@ -90,7 +93,7 @@ export function HealthMetrics() {
                     </div>
                   </div>
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-all duration-300"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-all duration-300 shadow-sm"
                     style={{
                       backgroundColor: `color-mix(in srgb, ${metric.ringColor} 15%, transparent)`,
                     }}
@@ -99,17 +102,18 @@ export function HealthMetrics() {
                   </div>
                 </div>
 
-                <div className="space-y-2 mt-auto">
+                <div className="space-y-2 mt-auto relative z-10">
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">Goal: {metric.target}</span>
                     <span className="text-xs font-semibold text-foreground">{metric.percentage}%</span>
                   </div>
                   <div className="w-full bg-muted rounded-full h-2.5 overflow-hidden">
                     <div
-                      className="h-full rounded-full transition-all duration-700"
+                      className="h-full rounded-full transition-all duration-700 shadow-sm"
                       style={{
                         width: `${metric.percentage}%`,
                         backgroundColor: metric.ringColor,
+                        boxShadow: `0 0 12px ${metric.ringColor}40`,
                       }}
                     />
                   </div>

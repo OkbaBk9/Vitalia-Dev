@@ -52,9 +52,9 @@ export function FloatingGuardian() {
       {/* Action feedback toast */}
       {actionFeedback && (
         <div className="absolute bottom-full right-0 mb-3 animate-bounce-in">
-          <div className="glass-card rounded-2xl px-4 py-3 shadow-xl flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
-              <span className="text-primary text-xs">+</span>
+          <div className="glass-card rounded-2xl px-4 py-3 shadow-xl flex items-center gap-2 border border-primary/40">
+            <div className="w-6 h-6 rounded-full bg-primary/25 flex items-center justify-center shadow-sm shadow-primary/30">
+              <span className="text-primary text-xs font-bold">+</span>
             </div>
             <p className="text-sm font-medium text-foreground">{actionFeedback} logged!</p>
           </div>
@@ -64,10 +64,10 @@ export function FloatingGuardian() {
       {/* Tooltip */}
       {showTooltip && !isExpanded && !actionFeedback && (
         <div className="absolute bottom-full right-0 mb-3 animate-bounce-in">
-          <div className="glass-card rounded-2xl px-4 py-3 shadow-xl max-w-[220px] relative">
+          <div className="glass-card rounded-2xl px-4 py-3 shadow-xl max-w-[220px] relative border border-border/50">
             <button
               onClick={dismissTooltip}
-              className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors btn-bounce"
+              className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-secondary/80 flex items-center justify-center hover:bg-secondary transition-colors btn-bounce shadow-sm"
             >
               <X size={12} className="text-muted-foreground" />
             </button>
@@ -75,23 +75,23 @@ export function FloatingGuardian() {
               Quick actions here! Log water, meals, and more.
             </p>
           </div>
-          <div className="absolute bottom-0 right-6 w-3 h-3 glass-card transform rotate-45 translate-y-1.5" />
+          <div className="absolute bottom-0 right-6 w-3 h-3 glass-card transform rotate-45 translate-y-1.5 border border-border/50" />
         </div>
       )}
 
       {/* Expanded menu */}
       {isExpanded && (
         <div className="absolute bottom-full right-0 mb-4 animate-scale-in">
-          <div className="glass-card rounded-3xl p-4 shadow-2xl min-w-[240px]">
+          <div className="glass-card rounded-3xl p-4 shadow-2xl min-w-[240px] border border-border/50">
             <div className="flex items-center justify-between mb-3">
               <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                 Quick Actions
               </p>
               <button
                 onClick={() => setIsExpanded(false)}
-                className="p-1 rounded-lg hover:bg-secondary/50 transition-colors"
+                className="p-1 rounded-lg hover:bg-secondary/50 transition-all duration-300 group"
               >
-                <X size={14} className="text-muted-foreground" />
+                <X size={14} className="text-muted-foreground group-hover:text-foreground transition-colors" />
               </button>
             </div>
             
