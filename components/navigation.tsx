@@ -3,17 +3,13 @@
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { 
-  Bell, Home, Users, BookOpen, ShoppingBag, CalendarDays, 
-  Zap, Stethoscope, Settings, Search, Menu, X, ChevronRight,
-  LogOut, User, Moon, Sun, HelpCircle
-} from "lucide-react"
+import { Bell, Chrome as Home, Users, BookOpen, ShoppingBag, CalendarDays, Zap, Stethoscope, Settings, Search, Menu, X, ChevronRight, LogOut, User, Moon, Sun, CircleHelp as HelpCircle, MapPin } from "lucide-react"
 import { NotificationsDropdown } from "./notifications-dropdown"
 import { SettingsModal } from "./settings-modal"
 
 const navItems = [
   { href: "/", label: "Home", id: "home", icon: Home },
-  { href: "/clubs", label: "Clubs", id: "clubs", icon: Users },
+  { href: "/map", label: "Map", id: "map", icon: MapPin },
   { href: "/blog", label: "Learning", id: "blog", icon: BookOpen },
   { href: "/shop", label: "Shop", id: "shop", icon: ShoppingBag },
   { href: "/events", label: "Events", id: "events", icon: CalendarDays },
