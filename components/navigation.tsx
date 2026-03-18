@@ -6,14 +6,13 @@ import { usePathname } from "next/navigation"
 import { Bell, Chrome as Home, Users, BookOpen, ShoppingBag, CalendarDays, Zap, Stethoscope, Settings, Search, Menu, X, ChevronRight, LogOut, User, Moon, Sun, CircleHelp as HelpCircle, MapPin } from "lucide-react"
 import { NotificationsDropdown } from "./notifications-dropdown"
 import { SettingsModal } from "./settings-modal"
-import { ProfileSidebar } from "./profile-sidebar"
 
 const navItems = [
-  { href: "/", label: "Home", id: "home", icon: Home },
-  { href: "/blog", label: "Learning", id: "blog", icon: BookOpen },
-  { href: "/consultants", label: "Consult", id: "consultants", icon: Stethoscope },
-  { href: "/shop", label: "Shop", id: "shop", icon: ShoppingBag },
+  { href: "/dashboard", label: "Home", id: "home", icon: Home },
+  { href: "/blog", label: "Explore", id: "blog", icon: BookOpen },
   { href: "/map", label: "Map", id: "map", icon: MapPin },
+  { href: "/consultants", label: "Consult", id: "consultants", icon: Stethoscope },
+  { href: "/events", label: "Events", id: "events", icon: CalendarDays },
 ]
 
 export function Navigation() {
@@ -23,17 +22,17 @@ export function Navigation() {
   const [hasNotification, setHasNotification] = useState(true)
   const [notificationsOpen, setNotificationsOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
-  const [profileOpen, setProfileOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [isDark, setIsDark] = useState(false)
   const lastScrollY = useRef(0)
-  const profileRef = useRef<HTMLDivElement>(null)
+  const notificationsRef = useRef<HTMLDivElement>(null)
+  const settingsRef = useRef<HTMLDivElement>(null)
 
   const activeId =
-    pathname === "/"
+    pathname === "/dashboard"
       ? "home"
-      : navItems.find((item) => pathname.startsWith(item.href) && item.href !== "/")?.id || "home"
+      : navItems.find((item) => pathname.startsWith(item.href) && item.href !== "/dashboard")?.id || "home"
 
   // Smart header - hide on scroll down, show on scroll up
   useEffect(() => {
@@ -46,7 +45,6 @@ export function Navigation() {
       } else if (currentScrollY > lastScrollY.current && currentScrollY > 60) {
         setIsVisible(false)
         setNotificationsOpen(false)
-        setProfileOpen(false)
       } else if (currentScrollY < lastScrollY.current) {
         setIsVisible(true)
       }
@@ -60,16 +58,19 @@ export function Navigation() {
 
   // Close profile dropdown on outside click
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
-        setProfileOpen(false)
+    const handleClickOutside = (e: MouseEvent) => {
+      if (notificationsRef.current && !notificationsRef.current.contains(e.target as Node)) {
+        setNotificationsOpen(false)
+      }
+      if (settingsRef.current && !settingsRef.current.contains(e.target as Node)) {
+        setSettingsOpen(false)
       }
     }
-    if (profileOpen) {
+    if (notificationsOpen || settingsOpen) {
       document.addEventListener("mousedown", handleClickOutside)
     }
     return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [profileOpen])
+  }, [notificationsOpen, settingsOpen])
 
   // Toggle dark mode
   const toggleDarkMode = () => {
@@ -134,7 +135,6 @@ export function Navigation() {
               <button
                 onClick={() => {
                   setNotificationsOpen(!notificationsOpen)
-                  setProfileOpen(false)
                 }}
                 className={`relative p-2.5 rounded-xl transition-all duration-300 btn-bounce ${
                   notificationsOpen
@@ -171,104 +171,6 @@ export function Navigation() {
             >
               <Settings size={20} className="transition-transform hover:rotate-90 duration-500" />
             </button>
-
-            {/* Profile dropdown */}
-            <div className="relative" ref={profileRef}>
-              <button
-                onClick={() => {
-                  setProfileOpen(!profileOpen)
-                  setNotificationsOpen(false)
-                }}
-                className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary via-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold text-sm cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-primary/40 hover:scale-110 hover:-translate-y-1 btn-bounce border border-primary/40"
-              >
-                EB
-              </button>
-
-              {/* Profile dropdown menu */}
-              {profileOpen && (
-                <div className="absolute top-full right-0 mt-2 w-72 glass-card rounded-2xl shadow-2xl overflow-hidden animate-scale-in z-50 border border-border/50">
-                  {/* Profile header */}
-                  <Link 
-                    href="/profile" 
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 p-4 hover:bg-white/30 dark:hover:bg-white/10 transition-colors duration-300 group"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
-                      EB
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-bold text-foreground">Elmehdi B.</p>
-                      <p className="text-xs text-muted-foreground">Level 12 Vitalian</p>
-                    </div>
-                    <ChevronRight size={16} className="text-muted-foreground group-hover:translate-x-1 transition-transform" />
-                  </Link>
-
-                  <div className="border-t border-border/50" />
-
-                  {/* Stats row */}
-                  <div className="grid grid-cols-3 gap-2 p-3">
-                    <div className="text-center p-2 rounded-xl bg-gradient-to-br from-primary/10 to-transparent backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all duration-300 cursor-pointer group">
-                      <p className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">7</p>
-                      <p className="text-[10px] text-muted-foreground">Streak</p>
-                    </div>
-                    <div className="text-center p-2 rounded-xl bg-gradient-to-br from-primary/10 to-transparent backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all duration-300 cursor-pointer group">
-                      <p className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">2,650</p>
-                      <p className="text-[10px] text-muted-foreground">VP</p>
-                    </div>
-                    <div className="text-center p-2 rounded-xl bg-gradient-to-br from-primary/10 to-transparent backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all duration-300 cursor-pointer group">
-                      <p className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">4</p>
-                      <p className="text-[10px] text-muted-foreground">Badges</p>
-                    </div>
-                  </div>
-
-                  <div className="border-t border-border/50" />
-
-                  {/* Menu items */}
-                  <div className="p-2">
-                    <Link 
-                      href="/profile" 
-                      onClick={() => setProfileOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/30 dark:hover:bg-white/10 transition-colors duration-300 group"
-                    >
-                      <User size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
-                      <span className="text-sm font-medium text-foreground">View Profile</span>
-                    </Link>
-                    <button 
-                      onClick={() => { setSettingsOpen(true); setProfileOpen(false) }}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/30 dark:hover:bg-white/10 transition-colors duration-300 group"
-                    >
-                      <Settings size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
-                      <span className="text-sm font-medium text-foreground">Settings</span>
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/30 dark:hover:bg-white/10 transition-colors duration-300 group">
-                      <HelpCircle size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
-                      <span className="text-sm font-medium text-foreground">Help Center</span>
-                    </button>
-                    <button 
-                      onClick={toggleDarkMode}
-                      className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-secondary/50 transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        {isDark ? <Sun size={18} className="text-muted-foreground" /> : <Moon size={18} className="text-muted-foreground" />}
-                        <span className="text-sm font-medium text-foreground">Dark Mode</span>
-                      </div>
-                      <div className={`w-10 h-6 rounded-full p-0.5 transition-all ${isDark ? "bg-primary" : "bg-muted"}`}>
-                        <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${isDark ? "translate-x-4" : "translate-x-0"}`} />
-                      </div>
-                    </button>
-                  </div>
-
-                  <div className="border-t border-border/50" />
-
-                  <div className="p-2">
-                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-destructive/10 transition-colors text-destructive">
-                      <LogOut size={18} />
-                      <span className="text-sm font-medium">Sign Out</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
 
             {/* Mobile menu button */}
             <button
@@ -358,83 +260,23 @@ export function Navigation() {
         </>
       )}
 
-      {/* Mobile bottom nav - Modern Hub Design */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-nav pb-[env(safe-area-inset-bottom)]">
-        <div className="flex items-center justify-center px-2 py-2">
-          {/* Left items */}
-          <div className="flex items-center justify-end flex-1 gap-1">
-            {navItems.slice(0, 2).map(({ href, label, id, icon: Icon }) => (
-              <Link
-                key={href}
-                href={href}
-                className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl transition-all ${
-                  activeId === id ? "text-primary" : "text-muted-foreground"
-                }`}
-              >
-                <div
-                  className={`p-2 rounded-xl transition-all duration-300 ${
-                    activeId === id ? "bg-primary/15 scale-110" : "hover:bg-secondary/50"
-                  }`}
-                >
-                  <Icon size={18} />
-                </div>
-                <span className="text-[9px] font-semibold">{label}</span>
-              </Link>
-            ))}
-          </div>
-
-          {/* Center AI Button - POP */}
-          <div className="px-3">
+      {/* Mobile bottom nav - Clean 5-item dock */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 glass-nav pb-[env(safe-area-inset-bottom)]">
+        <div className="flex items-center justify-around px-2 py-3">
+          {navItems.map(({ href, label, id, icon: Icon }) => (
             <Link
-              href="/guardian"
-              className={`flex flex-col items-center gap-1 relative transform transition-all duration-300 ${
-                activeId === "guardian" ? "scale-105" : "hover:scale-110"
+              key={href}
+              href={href}
+              className={`flex flex-col items-center gap-1 px-2 py-2 rounded-xl transition-all duration-300 ${
+                activeId === id 
+                  ? "text-primary bg-primary/10 scale-105" 
+                  : "text-muted-foreground hover:text-foreground hover:bg-secondary/30"
               }`}
             >
-              <div className="absolute inset-0 w-16 h-16 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 rounded-full blur-lg opacity-40 animate-pulse-soft" />
-              <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-lg shadow-xl shadow-emerald-500/50 border-2 border-white/20 active:scale-95">
-                <span className="text-2xl">+</span>
-              </div>
-              <span className="text-[9px] font-bold text-emerald-600 mt-1">Create</span>
+              <Icon size={20} strokeWidth={activeId === id ? 2.5 : 2} />
+              <span className="text-[8px] font-medium">{label}</span>
             </Link>
-          </div>
-
-          {/* Right items */}
-          <div className="flex items-center justify-start flex-1 gap-1">
-            {navItems.slice(2).map(({ href, label, id, icon: Icon }) => (
-              <Link
-                key={href}
-                href={href}
-                className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl transition-all ${
-                  activeId === id ? "text-primary" : "text-muted-foreground"
-                }`}
-              >
-                <div
-                  className={`p-2 rounded-xl transition-all duration-300 ${
-                    activeId === id ? "bg-primary/15 scale-110" : "hover:bg-secondary/50"
-                  }`}
-                >
-                  <Icon size={18} />
-                </div>
-                <span className="text-[9px] font-semibold">{label}</span>
-              </Link>
-            ))}
-          </div>
-
-          {/* Profile Sidebar Toggle */}
-          <div className="px-3">
-            <button
-              onClick={() => setProfileOpen(!profileOpen)}
-              className={`flex flex-col items-center gap-0.5 transition-all ${
-                profileOpen ? "text-primary" : "text-muted-foreground"
-              }`}
-            >
-              <div className={`w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-[9px] font-bold text-primary-foreground transition-all ${profileOpen ? "scale-110 ring-2 ring-primary/30" : ""}`}>
-                EB
-              </div>
-              <span className="text-[9px] font-semibold">Profile</span>
-            </button>
-          </div>
+          ))}
         </div>
       </nav>
 
@@ -461,9 +303,6 @@ export function Navigation() {
           </div>
         </>
       )}
-
-      {/* Profile Sidebar */}
-      <ProfileSidebar isOpen={profileOpen} onClose={() => setProfileOpen(false)} />
 
       {/* Settings Modal */}
       <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
