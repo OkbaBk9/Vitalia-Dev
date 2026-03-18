@@ -1,269 +1,132 @@
-"use client"
+'use client'
 
-import { useState, useEffect } from "react"
-import { VitalityScore } from "@/components/vitality-score"
-import { DailyPath } from "@/components/daily-path"
-import { Leaderboard } from "@/components/leaderboard"
-import { ActiveChallenge } from "@/components/active-challenge"
-import { HealthMetrics } from "@/components/health-metrics"
-import { ActivityChart } from "@/components/activity-chart"
-import { Flame, Zap, Award, TrendingUp, Sparkles, ChevronRight } from "lucide-react"
-import Link from "next/link"
+import Link from 'next/link'
+import { ArrowRight, CheckCircle2, Zap, Heart, TrendingUp, Shield, Smartphone, Users } from 'lucide-react'
 
-export default function Dashboard() {
-  const [userName] = useState("Elmehdi")
-  const [date, setDate] = useState("")
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [greeting, setGreeting] = useState("Hello")
-  const streak = 7
-  const vitaPoints = 2650
-  const level = 12
-
-  useEffect(() => {
-    const hour = new Date().getHours()
-    if (hour < 12) setGreeting("Good morning")
-    else if (hour < 18) setGreeting("Good afternoon")
-    else setGreeting("Good evening")
-
-    setDate(
-      new Date().toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "short",
-        day: "numeric",
-      }),
-    )
-    setIsLoaded(true)
-  }, [])
-
+export default function Landing() {
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Animated gradient background */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-bl from-primary/8 via-transparent to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-[var(--color-blue)]/5 via-transparent to-transparent rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-primary/3 via-transparent to-[var(--color-orange)]/3 rounded-full blur-3xl animate-spin-slow" />
-      </div>
+    <div className="min-h-screen bg-background overflow-hidden">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 glass-nav">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/70 rounded-lg flex items-center justify-center text-white font-bold text-sm">V</div>
+            <span className="font-bold text-lg hidden sm:inline">Vitalia</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link href="/auth/signin" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Sign In</Link>
+            <Link href="/auth/login" className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors">Get Started</Link>
+          </div>
+        </div>
+      </nav>
 
-      <div className="max-w-6xl mx-auto px-4 md:px-6 py-8 relative">
-        {/* Header with greeting, streak, and XP */}
-        <div
-          className={`mb-8 transition-all duration-700 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-        >
-          <div className="flex items-start justify-between flex-wrap gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">
-                  {greeting}, {userName}
-                </h1>
-                <Sparkles size={24} className="text-primary animate-pulse-soft" />
-              </div>
-              <p className="text-sm text-muted-foreground">{date}</p>
+      {/* Hero Section */}
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-6xl mx-auto">
+          {/* Gradient background */}
+          <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-primary/20 via-transparent to-transparent rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-tr from-primary/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+          
+          <div className="relative z-10 text-center mb-12">
+            <div className="inline-block mb-6 px-4 py-2 bg-primary/10 rounded-full border border-primary/20">
+              <span className="text-sm font-semibold text-primary">Welcome to a Healthier You</span>
             </div>
-            
-            {/* Stats pills */}
-            <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-              {/* Streak */}
-              <div className="flex items-center gap-2 glass-button px-3 sm:px-4 py-2 rounded-2xl btn-bounce cursor-pointer group hover:scale-105 shadow-sm hover:shadow-md transition-all duration-300">
-                <div className="w-8 h-8 rounded-xl flex items-center justify-center backdrop-blur-sm transition-all group-hover:scale-110 duration-300" style={{ backgroundColor: "color-mix(in srgb, var(--color-streak) 20%, transparent)" }}>
-                  <Flame size={16} style={{ color: "var(--color-streak)" }} className="animate-pulse-soft" />
-                </div>
-                <div>
-                  <span className="text-sm sm:text-lg font-bold text-foreground">{streak}</span>
-                  <p className="text-[9px] sm:text-[10px] font-medium text-muted-foreground leading-none">Day Streak</p>
-                </div>
-              </div>
-              
-              {/* VitaPoints */}
-              <div className="flex items-center gap-2 glass-button px-3 sm:px-4 py-2 rounded-2xl btn-bounce cursor-pointer group hover:scale-105 shadow-sm hover:shadow-md transition-all duration-300">
-                <div className="w-8 h-8 rounded-xl bg-primary/15 flex items-center justify-center backdrop-blur-sm transition-all group-hover:scale-110 duration-300">
-                  <Zap size={16} className="text-primary" />
-                </div>
-                <div>
-                  <span className="text-sm sm:text-lg font-bold text-foreground">{vitaPoints}</span>
-                  <p className="text-[9px] sm:text-[10px] font-medium text-muted-foreground leading-none">VitaPoints</p>
-                </div>
-              </div>
-              
-              {/* Level Badge */}
-              <Link href="/profile" className="hidden sm:flex items-center gap-2 glass-button px-4 py-2 rounded-2xl btn-bounce group hover:scale-105 shadow-sm hover:shadow-md transition-all duration-300">
-                <div className="w-8 h-8 rounded-xl flex items-center justify-center backdrop-blur-sm transition-all group-hover:scale-110 duration-300" style={{ backgroundColor: "color-mix(in srgb, var(--color-blue) 20%, transparent)" }}>
-                  <Award size={16} style={{ color: "var(--color-blue)" }} />
-                </div>
-                <div>
-                  <span className="text-lg font-bold text-foreground">Lv.{level}</span>
-                  <p className="text-[10px] font-medium text-muted-foreground leading-none">Vitalian</p>
-                </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6 leading-tight tracking-tight">
+              Your Personal AI<br />Health Guardian
+            </h1>
+            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
+              Track your wellness journey with intelligent insights, connect with friends, and achieve your health goals with Vitalia. Your companion for a healthier, happier life.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link href="/auth/login" className="px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all hover:shadow-lg shadow-primary/25 flex items-center gap-2">
+                Start Free Trial <ArrowRight size={18} />
+              </Link>
+              <Link href="/auth/signin" className="px-8 py-3 glass-card font-semibold rounded-lg hover:bg-secondary/50 transition-colors border border-border">
+                Sign In
               </Link>
             </div>
           </div>
-        </div>
 
-        {/* Main Grid - Vitality Score + Daily Path + Sidebar */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          {/* Left: Vitality Score + Daily Path */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Vitality Score Card */}
-            <div className="glass-card rounded-3xl p-5 sm:p-6 flex flex-col md:flex-row items-center gap-6 relative overflow-hidden animate-fade-scale">
-              {/* Decorative elements */}
-              <div className="absolute top-0 right-0 w-60 h-60 bg-gradient-to-bl from-primary/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-[var(--color-blue)]/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-              
-              <VitalityScore score={87} size={160} />
-              
-              <div className="flex-1 relative z-10">
-                <div className="flex items-center gap-2 mb-2">
-                  <h2 className="text-lg font-bold text-foreground">Your Vitality Today</h2>
-                  <span className="px-2 py-0.5 rounded-full bg-primary/15 text-primary text-xs font-bold">Great!</span>
+          {/* Hero Image - Notion style illustration */}
+          <div className="relative z-10 mt-16 rounded-2xl overflow-hidden glass-card border border-border/50 p-1">
+            <div className="bg-gradient-to-br from-primary/5 to-transparent rounded-xl p-8 flex items-center justify-center min-h-96">
+              <div className="flex flex-col items-center justify-center gap-4">
+                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                  <Heart size={48} className="text-primary" />
                 </div>
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                  You are above average this week. Complete your daily path to keep climbing the leaderboard!
-                </p>
-                
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
-                  {[
-                    { label: "Steps", value: "7,890", color: "var(--color-activity)", trend: "+12%" },
-                    { label: "Water", value: "1.8L", color: "var(--color-hydration)", trend: "+5%" },
-                    { label: "Sleep", value: "6.5h", color: "var(--color-sleep)", trend: "-8%" },
-                    { label: "Calories", value: "1,650", color: "var(--color-nutrition)", trend: "+3%" },
-                  ].map((stat, index) => (
-                    <div 
-                      key={stat.label} 
-                      className="glass-button rounded-xl p-3 cursor-pointer"
-                      style={{ animationDelay: `${index * 100}ms` }}
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">{stat.label}</span>
-                        <span className={`text-[10px] font-bold ${stat.trend.startsWith("+") ? "text-primary" : "text-destructive"}`}>
-                          {stat.trend}
-                        </span>
-                      </div>
-                      <p className="text-lg font-bold text-foreground">{stat.value}</p>
-                      <div className="w-full h-1 bg-secondary/50 rounded-full mt-2 overflow-hidden">
-                        <div 
-                          className="h-full rounded-full transition-all duration-1000"
-                          style={{ 
-                            backgroundColor: stat.color, 
-                            width: `${60 + Math.random() * 30}%` 
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Daily Path */}
-            <DailyPath />
-          </div>
-
-          {/* Right Sidebar */}
-          <div className="space-y-6">
-            <Leaderboard />
-            <ActiveChallenge />
-            
-            {/* Quick links card */}
-            <div className="glass-card rounded-2xl p-4 animate-fade-scale glass-hover relative overflow-hidden" style={{ animationDelay: "200ms" }}>
-              {/* Subtle gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent pointer-events-none opacity-0 hover:opacity-100 transition-opacity duration-500" />
-              
-              <h3 className="font-bold text-foreground mb-3 text-sm relative z-10">Quick Actions</h3>
-              <div className="space-y-2 relative z-10">
-                {[
-                  { label: "View All Stats", href: "/profile", color: "var(--color-blue)" },
-                  { label: "Join a Club", href: "/clubs", color: "var(--primary)" },
-                  { label: "Browse Shop", href: "/shop", color: "var(--color-orange)" },
-                ].map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="flex items-center justify-between p-3 rounded-xl hover:bg-secondary/70 hover:backdrop-blur-sm transition-all group btn-bounce duration-300"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div 
-                        className="w-2 h-2 rounded-full transition-transform group-hover:scale-150 duration-300"
-                        style={{ backgroundColor: link.color }}
-                      />
-                      <span className="text-sm font-medium text-foreground">{link.label}</span>
-                    </div>
-                    <ChevronRight size={16} className="text-muted-foreground group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                ))}
+                <p className="text-muted-foreground text-center">Beautiful dashboard with real-time health insights</p>
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Health Metrics */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-foreground">Today's Progress</h2>
-            <Link href="/profile" className="text-sm font-medium text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
-              View All <ChevronRight size={14} />
-            </Link>
+      {/* Features Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/20">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">Everything you need to thrive</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">Vitalia brings together all the tools you need for comprehensive health tracking</p>
           </div>
-          <HealthMetrics />
-        </div>
 
-        {/* Activity Chart */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold text-foreground">Weekly Activity</h3>
-            <div className="flex items-center gap-2">
-              {["Steps", "Calories", "Sleep"].map((tab, i) => (
-                <button
-                  key={tab}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all btn-bounce ${
-                    i === 0 ? "bg-primary/15 text-primary" : "text-muted-foreground hover:bg-secondary/50"
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-          </div>
-          <ActivityChart />
-        </div>
-
-        {/* Shop Section */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-foreground">Premium Wellness</h2>
-            <Link href="/shop" className="text-sm font-medium text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
-              Shop All <ChevronRight size={14} />
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-8">
             {[
-              { id: 1, name: "Premium Yoga Mat", price: "$49.99", rating: 4.8, badge: "Best Seller" },
-              { id: 2, name: "Smart Water Bottle", price: "$79.99", rating: 4.9, badge: "New" },
-              { id: 3, name: "Wellness Course Bundle", price: "$199.99", rating: 4.7, badge: "Limited" },
-            ].map((product) => (
-              <button key={product.id} className="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition-all group">
-                <div className="relative aspect-video bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent" />
-                  <Zap size={48} className="text-primary/30 group-hover:scale-110 transition-transform" />
-                  <span className="absolute top-3 right-3 px-2 py-1 bg-primary/20 text-primary text-xs font-bold rounded-lg">
-                    {product.badge}
-                  </span>
+              { icon: Zap, title: 'AI-Powered Insights', desc: 'Get personalized recommendations based on your health data and habits' },
+              { icon: Users, title: 'Social Motivation', desc: 'Connect with friends, share achievements, and compete on leaderboards' },
+              { icon: Heart, title: 'Health Tracking', desc: 'Monitor sleep, activity, nutrition, and wellness metrics in one place' },
+              { icon: TrendingUp, title: 'Progress Analytics', desc: 'Visualize your improvements with detailed charts and statistics' },
+              { icon: Shield, title: 'Privacy First', desc: 'Your health data is encrypted and stays completely under your control' },
+              { icon: Smartphone, title: 'Mobile First', desc: 'Full-featured experience optimized for your smartphone and tablet' },
+            ].map((feature, i) => (
+              <div key={i} className="glass-card rounded-2xl p-6 border border-border hover:border-primary/50 transition-all hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-1">
+                <div className="w-12 h-12 rounded-lg bg-primary/15 flex items-center justify-center mb-4">
+                  <feature.icon size={24} className="text-primary" />
                 </div>
-                
-                <div className="p-4">
-                  <h3 className="font-bold text-foreground text-sm mb-2">{product.name}</h3>
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-primary">{product.price}</span>
-                    <div className="flex items-center gap-1">
-                      <span className="text-xs font-medium text-muted-foreground">{product.rating}</span>
-                      <Sparkles size={14} className="text-yellow-500" />
-                    </div>
-                  </div>
-                </div>
-              </button>
+                <h3 className="text-lg font-bold text-foreground mb-2">{feature.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{feature.desc}</p>
+              </div>
             ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Test Account CTA */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="glass-card rounded-2xl p-8 sm:p-12 border border-border relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-primary/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10 text-center">
+              <h3 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Ready to get started?</h3>
+              <p className="text-lg text-muted-foreground mb-8">Use our demo account to explore the full Vitalia experience</p>
+              <div className="bg-secondary/50 rounded-lg p-6 mb-8 text-left inline-block">
+                <p className="text-sm font-medium text-foreground mb-2">Test Account:</p>
+                <p className="font-mono text-primary font-semibold">Email: test@vitalia.com</p>
+                <p className="font-mono text-primary font-semibold">Password: password123</p>
+              </div>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <Link href="/auth/signin" className="px-8 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:bg-primary/90 transition-all hover:shadow-lg shadow-primary/25 flex items-center gap-2">
+                  Sign In Now <ArrowRight size={18} />
+                </Link>
+                <Link href="/auth/login" className="px-8 py-3 glass-card font-semibold rounded-lg hover:bg-secondary/50 transition-colors border border-border">
+                  Create Account
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-8 px-4 sm:px-6 lg:px-8 border-t border-border/50">
+        <div className="max-w-6xl mx-auto flex items-center justify-between flex-col sm:flex-row gap-4 text-sm text-muted-foreground">
+          <p>&copy; 2026 Vitalia. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <Link href="#" className="hover:text-foreground transition-colors">Privacy</Link>
+            <Link href="#" className="hover:text-foreground transition-colors">Terms</Link>
+            <Link href="#" className="hover:text-foreground transition-colors">Contact</Link>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

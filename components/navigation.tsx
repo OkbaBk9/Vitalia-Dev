@@ -8,7 +8,7 @@ import { NotificationsDropdown } from "./notifications-dropdown"
 import { SettingsModal } from "./settings-modal"
 
 const navItems = [
-  { href: "/", label: "Home", id: "home", icon: Home },
+  { href: "/dashboard", label: "Home", id: "home", icon: Home },
   { href: "/blog", label: "Explore", id: "blog", icon: BookOpen },
   { href: "/map", label: "Map", id: "map", icon: MapPin },
   { href: "/consultants", label: "Consult", id: "consultants", icon: Stethoscope },
@@ -30,9 +30,9 @@ export function Navigation() {
   const settingsRef = useRef<HTMLDivElement>(null)
 
   const activeId =
-    pathname === "/"
+    pathname === "/dashboard"
       ? "home"
-      : navItems.find((item) => pathname.startsWith(item.href) && item.href !== "/")?.id || "home"
+      : navItems.find((item) => pathname.startsWith(item.href) && item.href !== "/dashboard")?.id || "home"
 
   // Smart header - hide on scroll down, show on scroll up
   useEffect(() => {

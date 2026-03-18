@@ -79,7 +79,7 @@ export function Leaderboard() {
               </div>
               <div className="flex items-center gap-2">
                 <p className="text-xs text-muted-foreground font-medium">
-                  {friend.points.toLocaleString()} VP
+                  {friend.points} VP
                 </p>
                 <span
                   className="text-[10px] px-1.5 py-0.5 rounded-full font-bold backdrop-blur-sm border border-[var(--color-blue)]/20"
