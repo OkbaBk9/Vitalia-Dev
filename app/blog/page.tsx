@@ -344,8 +344,6 @@ export default function BlogPage() {
                 ))}
               </nav>
 
-                </nav>
-              </div>
               {/* Trending sidebar */}
               <div className="glass-card rounded-2xl p-4 border-0">
                 <h3 className="font-bold text-foreground mb-3 text-sm uppercase tracking-wider flex items-center gap-2">
