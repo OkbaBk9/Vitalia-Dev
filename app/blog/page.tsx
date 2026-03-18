@@ -18,7 +18,7 @@ const initialPosts = [
     saved: false,
     comments: [
       { id: 1, author: 'Sarah', avatar: 'S', time: '1h ago', content: 'Amazing! Keep it up! 🎉', likes: 5, liked: false },
-      { id: 2, author: 'Mike', avatar: 'M', time: '45m ago', content: 'That\''s awesome dude!', likes: 3, liked: false },
+      { id: 2, author: 'Mike', avatar: 'M', time: '45m ago', content: "That's awesome dude!", likes: 3, liked: false },
     ],
   },
   {
