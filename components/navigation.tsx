@@ -26,7 +26,8 @@ export function Navigation() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [isDark, setIsDark] = useState(false)
   const lastScrollY = useRef(0)
-  const profileRef = useRef<HTMLDivElement>(null)
+  const notificationsRef = useRef<HTMLDivElement>(null)
+  const settingsRef = useRef<HTMLDivElement>(null)
 
   const activeId =
     pathname === "/"
@@ -134,7 +135,6 @@ export function Navigation() {
               <button
                 onClick={() => {
                   setNotificationsOpen(!notificationsOpen)
-                  setProfileOpen(false)
                 }}
                 className={`relative p-2.5 rounded-xl transition-all duration-300 btn-bounce ${
                   notificationsOpen
@@ -171,104 +171,6 @@ export function Navigation() {
             >
               <Settings size={20} className="transition-transform hover:rotate-90 duration-500" />
             </button>
-
-            {/* Profile dropdown */}
-            <div className="relative" ref={profileRef}>
-              <button
-                onClick={() => {
-                  setProfileOpen(!profileOpen)
-                  setNotificationsOpen(false)
-                }}
-                className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary via-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold text-sm cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-primary/40 hover:scale-110 hover:-translate-y-1 btn-bounce border border-primary/40"
-              >
-                EB
-              </button>
-
-              {/* Profile dropdown menu */}
-              {profileOpen && (
-                <div className="absolute top-full right-0 mt-2 w-72 glass-card rounded-2xl shadow-2xl overflow-hidden animate-scale-in z-50 border border-border/50">
-                  {/* Profile header */}
-                  <Link 
-                    href="/profile" 
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 p-4 hover:bg-white/30 dark:hover:bg-white/10 transition-colors duration-300 group"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
-                      EB
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-bold text-foreground">Elmehdi B.</p>
-                      <p className="text-xs text-muted-foreground">Level 12 Vitalian</p>
-                    </div>
-                    <ChevronRight size={16} className="text-muted-foreground group-hover:translate-x-1 transition-transform" />
-                  </Link>
-
-                  <div className="border-t border-border/50" />
-
-                  {/* Stats row */}
-                  <div className="grid grid-cols-3 gap-2 p-3">
-                    <div className="text-center p-2 rounded-xl bg-gradient-to-br from-primary/10 to-transparent backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all duration-300 cursor-pointer group">
-                      <p className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">7</p>
-                      <p className="text-[10px] text-muted-foreground">Streak</p>
-                    </div>
-                    <div className="text-center p-2 rounded-xl bg-gradient-to-br from-primary/10 to-transparent backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all duration-300 cursor-pointer group">
-                      <p className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">2,650</p>
-                      <p className="text-[10px] text-muted-foreground">VP</p>
-                    </div>
-                    <div className="text-center p-2 rounded-xl bg-gradient-to-br from-primary/10 to-transparent backdrop-blur-sm border border-primary/20 hover:border-primary/40 transition-all duration-300 cursor-pointer group">
-                      <p className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">4</p>
-                      <p className="text-[10px] text-muted-foreground">Badges</p>
-                    </div>
-                  </div>
-
-                  <div className="border-t border-border/50" />
-
-                  {/* Menu items */}
-                  <div className="p-2">
-                    <Link 
-                      href="/profile" 
-                      onClick={() => setProfileOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/30 dark:hover:bg-white/10 transition-colors duration-300 group"
-                    >
-                      <User size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
-                      <span className="text-sm font-medium text-foreground">View Profile</span>
-                    </Link>
-                    <button 
-                      onClick={() => { setSettingsOpen(true); setProfileOpen(false) }}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/30 dark:hover:bg-white/10 transition-colors duration-300 group"
-                    >
-                      <Settings size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
-                      <span className="text-sm font-medium text-foreground">Settings</span>
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/30 dark:hover:bg-white/10 transition-colors duration-300 group">
-                      <HelpCircle size={18} className="text-muted-foreground group-hover:text-primary transition-colors" />
-                      <span className="text-sm font-medium text-foreground">Help Center</span>
-                    </button>
-                    <button 
-                      onClick={toggleDarkMode}
-                      className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-secondary/50 transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        {isDark ? <Sun size={18} className="text-muted-foreground" /> : <Moon size={18} className="text-muted-foreground" />}
-                        <span className="text-sm font-medium text-foreground">Dark Mode</span>
-                      </div>
-                      <div className={`w-10 h-6 rounded-full p-0.5 transition-all ${isDark ? "bg-primary" : "bg-muted"}`}>
-                        <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${isDark ? "translate-x-4" : "translate-x-0"}`} />
-                      </div>
-                    </button>
-                  </div>
-
-                  <div className="border-t border-border/50" />
-
-                  <div className="p-2">
-                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-destructive/10 transition-colors text-destructive">
-                      <LogOut size={18} />
-                      <span className="text-sm font-medium">Sign Out</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
 
             {/* Mobile menu button */}
             <button
