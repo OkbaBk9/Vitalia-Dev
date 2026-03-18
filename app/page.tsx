@@ -79,7 +79,7 @@ export default function Dashboard() {
                   <Zap size={16} className="text-primary" />
                 </div>
                 <div>
-                  <span className="text-sm sm:text-lg font-bold text-foreground">{vitaPoints.toLocaleString()}</span>
+                  <span className="text-sm sm:text-lg font-bold text-foreground">{vitaPoints}</span>
                   <p className="text-[9px] sm:text-[10px] font-medium text-muted-foreground leading-none">VitaPoints</p>
                 </div>
               </div>
@@ -223,6 +223,45 @@ export default function Dashboard() {
             </div>
           </div>
           <ActivityChart />
+        </div>
+
+        {/* Shop Section */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-bold text-foreground">Premium Wellness</h2>
+            <Link href="/shop" className="text-sm font-medium text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
+              Shop All <ChevronRight size={14} />
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { id: 1, name: "Premium Yoga Mat", price: "$49.99", rating: 4.8, badge: "Best Seller" },
+              { id: 2, name: "Smart Water Bottle", price: "$79.99", rating: 4.9, badge: "New" },
+              { id: 3, name: "Wellness Course Bundle", price: "$199.99", rating: 4.7, badge: "Limited" },
+            ].map((product) => (
+              <button key={product.id} className="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition-all group">
+                <div className="relative aspect-video bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent" />
+                  <Zap size={48} className="text-primary/30 group-hover:scale-110 transition-transform" />
+                  <span className="absolute top-3 right-3 px-2 py-1 bg-primary/20 text-primary text-xs font-bold rounded-lg">
+                    {product.badge}
+                  </span>
+                </div>
+                
+                <div className="p-4">
+                  <h3 className="font-bold text-foreground text-sm mb-2">{product.name}</h3>
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-bold text-primary">{product.price}</span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs font-medium text-muted-foreground">{product.rating}</span>
+                      <Sparkles size={14} className="text-yellow-500" />
+                    </div>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

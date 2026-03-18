@@ -1,247 +1,172 @@
 'use client'
 
 import { useState } from 'react'
-import { Heart, MessageCircle, Share2, Search, MoreHorizontal, Bookmark, HandHeart, Sparkles } from 'lucide-react'
+import { Heart, MessageCircle, Share2, Search, MoreHorizontal, Bookmark, Sparkles, TrendingUp, Flame, Users } from 'lucide-react'
+import Link from 'next/link'
 
-const initialPosts = [
+const exploreContent = [
   {
     id: 1,
-    author: 'Alex Runner',
-    avatar: 'AR',
-    time: '2h ago',
-    content: 'Just hit a new personal record on my 10K run! 43:22 🏃‍♂️ Feeling incredible!',
-    image: '/api/placeholder?w=400&h=300',
-    likes: 234,
-    comments: 12,
-    shares: 8,
+    author: { name: 'Sarah Chen', avatar: 'SC', bio: 'Fitness Coach', followers: 2.4 },
+    title: 'Morning Yoga Routine for Energy',
+    description: 'Start your day right with this 10-minute energizing yoga flow. Perfect for beginners and advanced practitioners.',
+    content: 'Discover how proper breathing techniques and mindful movement can transform your mornings. This routine combines traditional yoga with modern wellness science...',
+    category: 'Fitness',
+    image: null,
+    likes: 324,
+    comments: 45,
+    shares: 12,
     liked: false,
     saved: false,
-    comments: [
-      { id: 1, author: 'Sarah', avatar: 'S', time: '1h ago', content: 'Amazing! Keep it up! 🎉', likes: 5, liked: false },
-      { id: 2, author: 'Mike', avatar: 'M', time: '45m ago', content: "That's awesome dude!", likes: 3, liked: false },
-    ],
+    trending: true,
   },
   {
     id: 2,
-    author: 'Emma Wellness',
-    avatar: 'EW',
-    time: '4h ago',
-    content: 'Morning meditation changed my perspective. Starting the day with gratitude and intention 🧘‍♀️✨',
-    image: '/api/placeholder?w=400&h=300',
-    likes: 456,
-    comments: 28,
-    shares: 45,
+    author: { name: 'Dr. James Park', avatar: 'JP', bio: 'Nutritionist', followers: 1.8 },
+    title: 'Plant-Based Protein Guide',
+    description: 'Everything you need to know about getting complete proteins from plant sources.',
+    content: 'Learn which plant-based foods provide all 9 essential amino acids, plus delicious recipes you can make today...',
+    category: 'Nutrition',
+    image: null,
+    likes: 521,
+    comments: 89,
+    shares: 34,
     liked: false,
     saved: false,
-    comments: [
-      { id: 3, author: 'Chris', avatar: 'C', time: '3h ago', content: 'I need to try this!', likes: 8, liked: false },
-    ],
+    trending: true,
   },
 ]
 
-export default function BlogPage() {
-  const [posts, setPosts] = useState(initialPosts)
-  const [expandedComments, setExpandedComments] = useState(new Set())
-  const [commentInputs, setCommentInputs] = useState({})
+export default function Explore() {
+  const [content, setContent] = useState(exploreContent)
+  const [selectedCategory, setSelectedCategory] = useState('All')
 
-  const toggleComments = (postId) => {
-    const newExpanded = new Set(expandedComments)
-    if (newExpanded.has(postId)) {
-      newExpanded.delete(postId)
-    } else {
-      newExpanded.add(postId)
-    }
-    setExpandedComments(newExpanded)
-  }
+  const categories = ['All', 'Fitness', 'Nutrition', 'Mental Health', 'Sleep', 'Wellness']
 
-  const toggleLike = (postId) => {
-    setPosts(posts.map(post => 
-      post.id === postId 
-        ? { ...post, liked: !post.liked, likes: post.liked ? post.likes - 1 : post.likes + 1 }
-        : post
+  const toggleLike = (id: number) => {
+    setContent(content.map(item => 
+      item.id === id ? { ...item, liked: !item.liked, likes: item.liked ? item.likes - 1 : item.likes + 1 } : item
     ))
   }
 
-  const toggleSave = (postId) => {
-    setPosts(posts.map(post => 
-      post.id === postId 
-        ? { ...post, saved: !post.saved }
-        : post
+  const toggleSave = (id: number) => {
+    setContent(content.map(item => 
+      item.id === id ? { ...item, saved: !item.saved } : item
     ))
-  }
-
-  const addComment = (postId) => {
-    const content = commentInputs[postId]
-    if (!content) return
-
-    setPosts(posts.map(post => 
-      post.id === postId 
-        ? {
-            ...post,
-            comments: [...post.comments, {
-              id: post.comments.length + 1,
-              author: 'You',
-              avatar: 'EB',
-              time: 'now',
-              content,
-              likes: 0,
-              liked: false,
-            }],
-          }
-        : post
-    ))
-    setCommentInputs({ ...commentInputs, [postId]: '' })
   }
 
   return (
-    <main className="min-h-screen bg-background pb-24">
-      {/* Header */}
-      <div className="sticky top-0 z-40 glass-nav px-4 py-3 border-b border-border/30">
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <h1 className="text-xl font-bold text-foreground">Learning Feed</h1>
-          <button className="p-2 rounded-lg hover:bg-secondary transition-colors">
-            <Search size={20} className="text-muted-foreground" />
-          </button>
+    <div className="min-h-screen bg-background">
+      {/* Header with search */}
+      <div className="sticky top-16 md:top-0 z-30 glass-nav border-b border-border/40">
+        <div className="max-w-2xl mx-auto px-4 py-4">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+              <input
+                type="text"
+                placeholder="Search wellness tips..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-secondary/50 border border-border/40 outline-none focus:bg-secondary transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Categories */}
+          <div className="flex gap-2 overflow-x-auto pb-2">
+            {categories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                  selectedCategory === cat
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-secondary/50 text-muted-foreground hover:bg-secondary/80'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="max-w-2xl mx-auto px-4 py-4 space-y-4">
-        {posts.map((post) => (
-          <div key={post.id} className="glass-card rounded-2xl overflow-hidden">
-            {/* Header */}
-            <div className="p-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-sm font-bold text-primary-foreground">
-                  {post.avatar}
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-foreground">{post.author}</p>
-                  <p className="text-xs text-muted-foreground">{post.time}</p>
+      {/* Main content */}
+      <div className="max-w-2xl mx-auto px-4 py-4 space-y-3">
+        {content.map(item => (
+          <article key={item.id} className="glass-card rounded-2xl overflow-hidden hover:shadow-lg transition-all">
+            {/* Card header with author */}
+            <div className="p-4 border-b border-border/40">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-sm font-bold text-primary-foreground">
+                    {item.author.avatar}
+                  </div>
+                  <div>
+                    <div className="font-semibold text-foreground">{item.author.name}</div>
+                    <p className="text-xs text-muted-foreground">{item.author.bio}</p>
+                  </div>
                 </div>
               </div>
-              <button className="p-2 rounded-lg hover:bg-secondary transition-colors">
-                <MoreHorizontal size={18} className="text-muted-foreground" />
-              </button>
+
+              {/* Category badge */}
+              <span className="inline-block px-2.5 py-1 bg-primary/15 text-primary text-xs font-semibold rounded-lg">
+                {item.category}
+              </span>
             </div>
 
             {/* Content */}
-            <div className="px-4 pb-3">
-              <p className="text-sm text-foreground leading-relaxed">{post.content}</p>
+            <div className="p-4">
+              <h3 className="text-lg font-bold text-foreground mb-2">{item.title}</h3>
+              <p className="text-sm text-muted-foreground mb-3">{item.description}</p>
             </div>
 
-            {/* Image */}
-            {post.image && (
-              <div className="px-4 pb-3">
-                <img src={post.image} alt="" className="w-full rounded-xl object-cover" />
+            {/* Engagement stats */}
+            <div className="px-4 py-3 bg-background/50 border-t border-border/40">
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <span>{item.likes} likes</span>
+                <span>{item.comments} comments</span>
+                <span>{item.shares} shares</span>
               </div>
-            )}
-
-            {/* Stats */}
-            <div className="px-4 py-2 text-xs text-muted-foreground border-b border-border/30 flex gap-4">
-              <span>{post.likes} likes</span>
-              <span>{post.comments.length} comments</span>
-              <span>{post.shares} shares</span>
             </div>
 
             {/* Actions */}
-            <div className="px-4 py-3 flex items-center justify-around gap-2">
+            <div className="px-4 py-3 flex items-center justify-between border-t border-border/40">
               <button
-                onClick={() => toggleLike(post.id)}
-                className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-all ${
-                  post.liked
-                    ? 'text-primary bg-primary/10'
-                    : 'text-muted-foreground hover:bg-secondary'
+                onClick={() => toggleLike(item.id)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
+                  item.liked
+                    ? 'text-red-500 bg-red-50 dark:bg-red-950/20'
+                    : 'text-muted-foreground hover:text-red-500'
                 }`}
               >
-                <Heart size={18} fill={post.liked ? 'currentColor' : 'none'} />
-                <span className="text-sm font-medium">Like</span>
+                <Heart size={16} fill={item.liked ? 'currentColor' : 'none'} />
+                <span className="text-sm">{item.likes}</span>
               </button>
+
+              <button className="flex items-center gap-2 px-3 py-2 rounded-lg text-muted-foreground hover:text-primary">
+                <MessageCircle size={16} />
+                <span className="text-sm">{item.comments}</span>
+              </button>
+
+              <button className="flex items-center gap-2 px-3 py-2 rounded-lg text-muted-foreground hover:text-primary">
+                <Share2 size={16} />
+                <span className="text-sm">{item.shares}</span>
+              </button>
+
               <button
-                onClick={() => toggleComments(post.id)}
-                className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-muted-foreground hover:bg-secondary transition-all"
-              >
-                                <MessageCircle size={18} />
-                <span className="text-sm font-medium">Comment</span>
-              </button>
-              <button className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-muted-foreground hover:bg-secondary transition-all">
-                <Share2 size={18} />
-                <span className="text-sm font-medium">Share</span>
-              </button>
-              <button
-                onClick={() => toggleSave(post.id)}
-                className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg transition-all ${
-                  post.saved
-                    ? 'text-primary bg-primary/10'
-                    : 'text-muted-foreground hover:bg-secondary'
+                onClick={() => toggleSave(item.id)}
+                className={`p-2 rounded-lg transition-all ${
+                  item.saved
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-primary'
                 }`}
               >
-                                <Bookmark size={18} fill={post.saved ? 'currentColor' : 'none'} />
-                <span className="text-sm font-medium">Save</span>
+                <Bookmark size={16} fill={item.saved ? 'currentColor' : 'none'} />
               </button>
             </div>
-
-            {/* Comments Section */}
-            {expandedComments.has(post.id) && (
-              <div className="mt-4 pt-4 border-t border-border/30 px-4 pb-4 space-y-3">
-                {/* Existing comments */}
-                {post.comments.length > 0 && (
-                  <div className="space-y-3">
-                    {post.comments.map((comment) => (
-                      <div key={comment.id} className="flex items-start gap-2.5">
-                        <div className="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-[10px] font-bold text-foreground flex-shrink-0">
-                          {comment.avatar}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-foreground">{comment.author}</span>
-                            <span className="text-[10px] text-muted-foreground">{comment.time}</span>
-                          </div>
-                          <p className="text-sm text-foreground mt-0.5 leading-relaxed">{comment.content}</p>
-                          <button className="text-[10px] text-muted-foreground hover:text-foreground mt-1 flex items-center gap-1">
-                            <HandHeart size={10} />
-                            {comment.likes > 0 && comment.likes}
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Add comment input */}
-                <div className="flex items-center gap-2 pt-2">
-                  <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground flex-shrink-0">
-                    EB
-                  </div>
-                  <div className="flex-1 flex items-center gap-2 bg-secondary/50 rounded-xl px-3 py-2 border-2 border-border focus-within:border-primary/30 transition-all">
-                    <input
-                      type="text"
-                      value={commentInputs[post.id] || ''}
-                      onChange={(e) =>
-                        setCommentInputs((prev) => ({
-                          ...prev,
-                          [post.id]: e.target.value,
-                        }))
-                      }
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') addComment(post.id)
-                      }}
-                      placeholder="Add a comment..."
-                      className="flex-1 bg-transparent outline-none text-sm text-foreground placeholder:text-muted-foreground"
-                    />
-                    <button
-                      onClick={() => addComment(post.id)}
-                      className="p-1.5 rounded-lg hover:bg-primary/20 text-primary transition-colors"
-                    >
-                      <Sparkles size={16} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          </article>
         ))}
       </div>
-    </main>
+    </div>
   )
 }
