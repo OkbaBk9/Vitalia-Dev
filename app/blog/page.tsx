@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Heart, MessageCircle2, Share2, Search, MoreHorizontal, BookMarked, HandHeart, Sparkles } from 'lucide-react'
+import { Heart, MessageCircle, Share2, Search, MoreHorizontal, Bookmark, HandHeart, Sparkles } from 'lucide-react'
 
 const initialPosts = [
   {
@@ -161,7 +161,7 @@ export default function BlogPage() {
                 onClick={() => toggleComments(post.id)}
                 className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-muted-foreground hover:bg-secondary transition-all"
               >
-                <MessageCircle2 size={18} />
+                                <MessageCircle size={18} />
                 <span className="text-sm font-medium">Comment</span>
               </button>
               <button className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-muted-foreground hover:bg-secondary transition-all">
@@ -176,7 +176,7 @@ export default function BlogPage() {
                     : 'text-muted-foreground hover:bg-secondary'
                 }`}
               >
-                <BookMarked size={18} fill={post.saved ? 'currentColor' : 'none'} />
+                                <Bookmark size={18} fill={post.saved ? 'currentColor' : 'none'} />
                 <span className="text-sm font-medium">Save</span>
               </button>
             </div>
