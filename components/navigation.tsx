@@ -6,15 +6,14 @@ import { usePathname } from "next/navigation"
 import { Bell, Chrome as Home, Users, BookOpen, ShoppingBag, CalendarDays, Zap, Stethoscope, Settings, Search, Menu, X, ChevronRight, LogOut, User, Moon, Sun, CircleHelp as HelpCircle, MapPin } from "lucide-react"
 import { NotificationsDropdown } from "./notifications-dropdown"
 import { SettingsModal } from "./settings-modal"
+import { ProfileSidebar } from "./profile-sidebar"
 
 const navItems = [
   { href: "/", label: "Home", id: "home", icon: Home },
-  { href: "/map", label: "Map", id: "map", icon: MapPin },
-  { href: "/blog", label: "Explore", id: "blog", icon: BookOpen },
-  { href: "/shop", label: "Shop", id: "shop", icon: ShoppingBag },
-  { href: "/events", label: "Events", id: "events", icon: CalendarDays },
+  { href: "/blog", label: "Learning", id: "blog", icon: BookOpen },
   { href: "/consultants", label: "Consult", id: "consultants", icon: Stethoscope },
-  { href: "/guardian", label: "AI Coach", id: "guardian", icon: Zap },
+  { href: "/shop", label: "Shop", id: "shop", icon: ShoppingBag },
+  { href: "/map", label: "Map", id: "map", icon: MapPin },
 ]
 
 export function Navigation() {
@@ -359,38 +358,83 @@ export function Navigation() {
         </>
       )}
 
-      {/* Mobile bottom nav */}
+      {/* Mobile bottom nav - Modern Hub Design */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-nav pb-[env(safe-area-inset-bottom)]">
-        <div className="flex items-center justify-around px-2 py-1.5">
-          {navItems.slice(0, 5).map(({ href, label, id, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${
-                activeId === id ? "text-primary" : "text-muted-foreground"
-              }`}
-            >
-              <div
-                className={`p-2 rounded-xl transition-all duration-300 ${
-                  activeId === id ? "bg-primary/15 scale-110" : "hover:bg-secondary/50"
+        <div className="flex items-center justify-center px-2 py-2">
+          {/* Left items */}
+          <div className="flex items-center justify-end flex-1 gap-1">
+            {navItems.slice(0, 2).map(({ href, label, id, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl transition-all ${
+                  activeId === id ? "text-primary" : "text-muted-foreground"
                 }`}
               >
-                <Icon size={20} />
+                <div
+                  className={`p-2 rounded-xl transition-all duration-300 ${
+                    activeId === id ? "bg-primary/15 scale-110" : "hover:bg-secondary/50"
+                  }`}
+                >
+                  <Icon size={18} />
+                </div>
+                <span className="text-[9px] font-semibold">{label}</span>
+              </Link>
+            ))}
+          </div>
+
+          {/* Center AI Button - POP */}
+          <div className="px-3">
+            <Link
+              href="/guardian"
+              className={`flex flex-col items-center gap-1 relative transform transition-all duration-300 ${
+                activeId === "guardian" ? "scale-105" : "hover:scale-110"
+              }`}
+            >
+              <div className="absolute inset-0 w-16 h-16 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 rounded-full blur-lg opacity-40 animate-pulse-soft" />
+              <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-lg shadow-xl shadow-emerald-500/50 border-2 border-white/20 active:scale-95">
+                <span className="text-2xl">+</span>
               </div>
-              <span className="text-[10px] font-semibold">{label}</span>
+              <span className="text-[9px] font-bold text-emerald-600 mt-1">Create</span>
             </Link>
-          ))}
-          <Link
-            href="/profile"
-            className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${
-              pathname === "/profile" ? "text-primary" : "text-muted-foreground"
-            }`}
-          >
-            <div className={`w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-[10px] font-bold text-primary-foreground transition-all ${pathname === "/profile" ? "scale-110 ring-2 ring-primary/30" : ""}`}>
-              EB
-            </div>
-            <span className="text-[10px] font-semibold">Profile</span>
-          </Link>
+          </div>
+
+          {/* Right items */}
+          <div className="flex items-center justify-start flex-1 gap-1">
+            {navItems.slice(2).map(({ href, label, id, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl transition-all ${
+                  activeId === id ? "text-primary" : "text-muted-foreground"
+                }`}
+              >
+                <div
+                  className={`p-2 rounded-xl transition-all duration-300 ${
+                    activeId === id ? "bg-primary/15 scale-110" : "hover:bg-secondary/50"
+                  }`}
+                >
+                  <Icon size={18} />
+                </div>
+                <span className="text-[9px] font-semibold">{label}</span>
+              </Link>
+            ))}
+          </div>
+
+          {/* Profile Sidebar Toggle */}
+          <div className="px-3">
+            <button
+              onClick={() => setProfileOpen(!profileOpen)}
+              className={`flex flex-col items-center gap-0.5 transition-all ${
+                profileOpen ? "text-primary" : "text-muted-foreground"
+              }`}
+            >
+              <div className={`w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-[9px] font-bold text-primary-foreground transition-all ${profileOpen ? "scale-110 ring-2 ring-primary/30" : ""}`}>
+                EB
+              </div>
+              <span className="text-[9px] font-semibold">Profile</span>
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -402,41 +446,24 @@ export function Navigation() {
             onClick={() => setSearchOpen(false)}
           />
           <div className="fixed top-20 left-1/2 -translate-x-1/2 w-full max-w-lg px-4 z-50 animate-slide-down">
-            <div className="glass-card rounded-2xl shadow-2xl overflow-hidden">
-              <div className="flex items-center gap-3 p-4">
-                <Search size={20} className="text-muted-foreground" />
-                <input
-                  autoFocus
-                  type="text"
-                  placeholder="Search Vitalia..."
-                  className="flex-1 bg-transparent outline-none text-foreground placeholder:text-muted-foreground"
-                />
-                <button 
-                  onClick={() => setSearchOpen(false)}
-                  className="p-1.5 rounded-lg hover:bg-secondary/50 transition-colors"
-                >
-                  <X size={18} className="text-muted-foreground" />
-                </button>
-              </div>
-              <div className="border-t border-border/50 p-4">
-                <p className="text-xs text-muted-foreground mb-3">Quick Links</p>
-                <div className="space-y-1">
-                  {["Dashboard", "My Progress", "AI Coach", "Shop"].map((item) => (
-                    <button 
-                      key={item}
-                      onClick={() => setSearchOpen(false)}
-                      className="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-secondary/50 transition-colors text-left"
-                    >
-                      <Search size={14} className="text-muted-foreground" />
-                      <span className="text-sm text-foreground">{item}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
+            <div className="glass-card rounded-2xl overflow-hidden p-4 flex items-center gap-3">
+              <Search size={20} className="text-muted-foreground" />
+              <input
+                autoFocus
+                type="text"
+                placeholder="Search events, clubs, people..."
+                className="flex-1 bg-transparent outline-none text-foreground placeholder:text-muted-foreground"
+              />
+              <button onClick={() => setSearchOpen(false)} className="p-1.5 rounded-lg hover:bg-secondary">
+                <X size={18} className="text-muted-foreground" />
+              </button>
             </div>
           </div>
         </>
       )}
+
+      {/* Profile Sidebar */}
+      <ProfileSidebar isOpen={profileOpen} onClose={() => setProfileOpen(false)} />
 
       {/* Settings Modal */}
       <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
