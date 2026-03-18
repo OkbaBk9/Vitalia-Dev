@@ -57,16 +57,19 @@ export function Navigation() {
 
   // Close profile dropdown on outside click
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
-        setProfileOpen(false)
+    const handleClickOutside = (e: MouseEvent) => {
+      if (notificationsRef.current && !notificationsRef.current.contains(e.target as Node)) {
+        setNotificationsOpen(false)
+      }
+      if (settingsRef.current && !settingsRef.current.contains(e.target as Node)) {
+        setSettingsOpen(false)
       }
     }
-    if (profileOpen) {
+    if (notificationsOpen || settingsOpen) {
       document.addEventListener("mousedown", handleClickOutside)
     }
     return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [profileOpen])
+  }, [notificationsOpen, settingsOpen])
 
   // Toggle dark mode
   const toggleDarkMode = () => {
