@@ -1,449 +1,142 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { 
-  Bell, Home, Users, BookOpen, ShoppingBag, CalendarDays, 
-  Zap, Stethoscope, Settings, Search, Menu, X, ChevronRight,
-  LogOut, User, Moon, Sun, HelpCircle
-} from "lucide-react"
-import { NotificationsDropdown } from "./notifications-dropdown"
-import { SettingsModal } from "./settings-modal"
+import { Menu, X, Phone, Mail, MapPin } from "lucide-react"
 
 const navItems = [
-  { href: "/", label: "Home", id: "home", icon: Home },
-  { href: "/clubs", label: "Clubs", id: "clubs", icon: Users },
-  { href: "/blog", label: "Learning", id: "blog", icon: BookOpen },
-  { href: "/shop", label: "Shop", id: "shop", icon: ShoppingBag },
-  { href: "/events", label: "Events", id: "events", icon: CalendarDays },
-  { href: "/consultants", label: "Consult", id: "consultants", icon: Stethoscope },
-  { href: "/guardian", label: "AI Coach", id: "guardian", icon: Zap },
+  { href: "/", label: "الرئيسية" },
+  { href: "/services", label: "الخدمات" },
+  { href: "/pricing", label: "الأسعار" },
+  { href: "/about", label: "حولنا" },
+  { href: "/faq", label: "الأسئلة الشائعة" },
+  { href: "/contact", label: "اتصل بنا" },
 ]
 
 export function Navigation() {
   const pathname = usePathname()
-  const [isVisible, setIsVisible] = useState(true)
-  const [isAtTop, setIsAtTop] = useState(true)
-  const [hasNotification, setHasNotification] = useState(true)
-  const [notificationsOpen, setNotificationsOpen] = useState(false)
-  const [settingsOpen, setSettingsOpen] = useState(false)
-  const [profileOpen, setProfileOpen] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
-  const [isDark, setIsDark] = useState(false)
-  const lastScrollY = useRef(0)
-  const profileRef = useRef<HTMLDivElement>(null)
+  const [isOpen, setIsOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
 
-  const activeId =
-    pathname === "/"
-      ? "home"
-      : navItems.find((item) => pathname.startsWith(item.href) && item.href !== "/")?.id || "home"
-
-  // Smart header - hide on scroll down, show on scroll up
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      setIsAtTop(currentScrollY < 10)
-      
-      if (currentScrollY < 10) {
-        setIsVisible(true)
-      } else if (currentScrollY > lastScrollY.current && currentScrollY > 60) {
-        setIsVisible(false)
-        setNotificationsOpen(false)
-        setProfileOpen(false)
-      } else if (currentScrollY < lastScrollY.current) {
-        setIsVisible(true)
-      }
-      
-      lastScrollY.current = currentScrollY
+      setIsScrolled(window.scrollY > 50)
     }
-    
-    window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Close profile dropdown on outside click
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
-        setProfileOpen(false)
-      }
-    }
-    if (profileOpen) {
-      document.addEventListener("mousedown", handleClickOutside)
-    }
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [profileOpen])
-
-  // Toggle dark mode
-  const toggleDarkMode = () => {
-    setIsDark(!isDark)
-    document.documentElement.classList.toggle("dark")
-  }
-
   return (
-    <>
-      {/* Desktop nav */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          isVisible ? "translate-y-0" : "-translate-y-full"
-        } ${
-          isAtTop
-            ? "bg-transparent"
-            : "glass-nav"
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
-          {/* Logo - Empty placeholder */}
-          <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary via-primary to-primary/70 flex items-center justify-center shadow-lg shadow-primary/25 group-hover:shadow-primary/40 transition-all duration-300 group-hover:scale-105 btn-bounce">
-              {/* Empty logo placeholder */}
+    <nav
+      className={`fixed top-0 right-0 left-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "glass-nav py-3 shadow-lg"
+          : "bg-white/50 dark:bg-slate-900/50 py-4"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center group-hover:shadow-lg group-hover:shadow-blue-400/50 transition-all duration-300 group-hover:scale-110">
+              <span className="text-white font-black text-lg">O</span>
             </div>
-            <span className="font-bold text-lg text-foreground hidden sm:block tracking-tight">Vitalia</span>
+            <div className="hidden sm:block">
+              <div className="text-sm font-bold text-blue-600 leading-none">أوقبة</div>
+              <div className="text-xs text-muted-foreground">سرفيسز</div>
+            </div>
           </Link>
 
-          {/* Desktop nav items */}
-          <div className="hidden lg:flex items-center gap-1">
-            {navItems.map(({ href, label, id, icon: Icon }) => (
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-8">
+            {navItems.map((item) => (
               <Link
-                key={href}
-                href={href}
-                className={`relative flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-300 group btn-bounce ${
-                  activeId === id
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                key={item.href}
+                href={item.href}
+                className={`text-sm font-medium transition-colors relative group ${
+                  pathname === item.href
+                    ? "text-primary"
+                    : "text-foreground hover:text-primary"
                 }`}
               >
-                <Icon size={16} className="transition-transform group-hover:scale-110" />
-                {label}
-                {activeId === id && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-primary animate-pulse-soft" />
-                )}
+                {item.label}
+                <span className="absolute bottom-0 right-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
           </div>
 
-          {/* Right actions */}
-          <div className="flex items-center gap-2">
-            {/* Search */}
-            <button
-              onClick={() => setSearchOpen(true)}
-              className="hidden md:flex p-2.5 rounded-xl glass-button text-muted-foreground hover:text-foreground"
+          {/* CTA Button */}
+          <div className="hidden md:flex items-center gap-4">
+            <a
+              href="https://wa.me/213780229481"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary text-sm"
             >
-              <Search size={20} />
-            </button>
-
-            {/* Notifications */}
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setNotificationsOpen(!notificationsOpen)
-                  setProfileOpen(false)
-                }}
-                className={`relative p-2.5 rounded-xl transition-all duration-300 btn-bounce ${
-                  notificationsOpen
-                    ? "bg-primary/10 text-primary"
-                    : "glass-button text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Bell size={20} />
-                {hasNotification && (
-                  <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-destructive rounded-full">
-                    <span className="absolute inset-0 rounded-full bg-destructive animate-pulse-ring" />
-                  </span>
-                )}
-              </button>
-              <NotificationsDropdown
-                isOpen={notificationsOpen}
-                onClose={() => setNotificationsOpen(false)}
-                onClearBadge={() => setHasNotification(false)}
-              />
-            </div>
-
-            {/* Dark mode toggle */}
-            <button
-              onClick={toggleDarkMode}
-              className="hidden sm:flex p-2.5 rounded-xl glass-button text-muted-foreground hover:text-foreground btn-bounce"
-            >
-              {isDark ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-
-            {/* Settings */}
-            <button
-              onClick={() => setSettingsOpen(true)}
-              className="hidden sm:flex p-2.5 rounded-xl glass-button text-muted-foreground hover:text-foreground btn-bounce"
-            >
-              <Settings size={20} className="transition-transform hover:rotate-90 duration-500" />
-            </button>
-
-            {/* Profile dropdown */}
-            <div className="relative" ref={profileRef}>
-              <button
-                onClick={() => {
-                  setProfileOpen(!profileOpen)
-                  setNotificationsOpen(false)
-                }}
-                className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary via-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold text-sm cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-primary/30 btn-bounce"
-              >
-                EB
-              </button>
-
-              {/* Profile dropdown menu */}
-              {profileOpen && (
-                <div className="absolute top-full right-0 mt-2 w-72 glass-card rounded-2xl shadow-2xl overflow-hidden animate-scale-in z-50">
-                  {/* Profile header */}
-                  <Link 
-                    href="/profile" 
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 p-4 hover:bg-secondary/50 transition-colors"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold">
-                      EB
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-bold text-foreground">Elmehdi B.</p>
-                      <p className="text-xs text-muted-foreground">Level 12 Vitalian</p>
-                    </div>
-                    <ChevronRight size={16} className="text-muted-foreground" />
-                  </Link>
-
-                  <div className="border-t border-border/50" />
-
-                  {/* Stats row */}
-                  <div className="grid grid-cols-3 gap-2 p-3">
-                    <div className="text-center p-2 rounded-xl bg-secondary/30">
-                      <p className="text-lg font-bold text-foreground">7</p>
-                      <p className="text-[10px] text-muted-foreground">Streak</p>
-                    </div>
-                    <div className="text-center p-2 rounded-xl bg-secondary/30">
-                      <p className="text-lg font-bold text-foreground">2,650</p>
-                      <p className="text-[10px] text-muted-foreground">VP</p>
-                    </div>
-                    <div className="text-center p-2 rounded-xl bg-secondary/30">
-                      <p className="text-lg font-bold text-foreground">4</p>
-                      <p className="text-[10px] text-muted-foreground">Badges</p>
-                    </div>
-                  </div>
-
-                  <div className="border-t border-border/50" />
-
-                  {/* Menu items */}
-                  <div className="p-2">
-                    <Link 
-                      href="/profile" 
-                      onClick={() => setProfileOpen(false)}
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-secondary/50 transition-colors"
-                    >
-                      <User size={18} className="text-muted-foreground" />
-                      <span className="text-sm font-medium text-foreground">View Profile</span>
-                    </Link>
-                    <button 
-                      onClick={() => { setSettingsOpen(true); setProfileOpen(false) }}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-secondary/50 transition-colors"
-                    >
-                      <Settings size={18} className="text-muted-foreground" />
-                      <span className="text-sm font-medium text-foreground">Settings</span>
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-secondary/50 transition-colors">
-                      <HelpCircle size={18} className="text-muted-foreground" />
-                      <span className="text-sm font-medium text-foreground">Help Center</span>
-                    </button>
-                    <button 
-                      onClick={toggleDarkMode}
-                      className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-secondary/50 transition-colors"
-                    >
-                      <div className="flex items-center gap-3">
-                        {isDark ? <Sun size={18} className="text-muted-foreground" /> : <Moon size={18} className="text-muted-foreground" />}
-                        <span className="text-sm font-medium text-foreground">Dark Mode</span>
-                      </div>
-                      <div className={`w-10 h-6 rounded-full p-0.5 transition-all ${isDark ? "bg-primary" : "bg-muted"}`}>
-                        <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${isDark ? "translate-x-4" : "translate-x-0"}`} />
-                      </div>
-                    </button>
-                  </div>
-
-                  <div className="border-t border-border/50" />
-
-                  <div className="p-2">
-                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-destructive/10 transition-colors text-destructive">
-                      <LogOut size={18} />
-                      <span className="text-sm font-medium">Sign Out</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden p-2.5 rounded-xl glass-button text-muted-foreground btn-bounce"
-            >
-              <Menu size={20} />
-            </button>
+              اتصل الآن
+            </a>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
-      </nav>
 
-      {/* Mobile slide-out menu */}
-      {mobileMenuOpen && (
-        <>
-          <div 
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 animate-fade-in"
-            onClick={() => setMobileMenuOpen(false)}
-          />
-          <div className="fixed top-0 right-0 h-full w-80 glass-card z-50 animate-slide-left shadow-2xl">
-            <div className="flex items-center justify-between p-4 border-b border-border/50">
-              <span className="font-bold text-foreground">Menu</span>
-              <button 
-                onClick={() => setMobileMenuOpen(false)}
-                className="p-2 rounded-xl hover:bg-secondary/50 transition-colors"
-              >
-                <X size={20} className="text-muted-foreground" />
-              </button>
-            </div>
-            
-            {/* Profile section in mobile menu */}
-            <Link 
-              href="/profile" 
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center gap-3 p-4 border-b border-border/50 hover:bg-secondary/30 transition-colors"
-            >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-primary-foreground font-bold">
-                EB
-              </div>
-              <div>
-                <p className="font-bold text-foreground">Elmehdi B.</p>
-                <p className="text-xs text-muted-foreground">Level 12 - 2,650 VP</p>
-              </div>
-            </Link>
-
-            <div className="p-3 space-y-1 overflow-y-auto max-h-[calc(100vh-180px)]">
-              {navItems.map(({ href, label, id, icon: Icon }) => (
+        {/* Mobile Navigation */}
+        {isOpen && (
+          <div className="md:hidden animate-slide-down absolute top-full left-0 right-0 bg-white dark:bg-slate-900 border-b border-border shadow-lg">
+            <div className="flex flex-col gap-2 p-4">
+              {navItems.map((item) => (
                 <Link
-                  key={href}
-                  href={href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-                    activeId === id
-                      ? "bg-primary/10 text-primary"
-                      : "text-foreground hover:bg-secondary/50"
-                  }`}
+                  key={item.href}
+                  href={item.href}
+                  className="px-4 py-2 text-foreground hover:bg-muted rounded-lg transition-colors"
+                  onClick={() => setIsOpen(false)}
                 >
-                  <Icon size={20} />
-                  <span className="font-medium">{label}</span>
+                  {item.label}
                 </Link>
               ))}
-
-              <div className="border-t border-border/50 my-3" />
-
-              <button 
-                onClick={() => { setSettingsOpen(true); setMobileMenuOpen(false) }}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-secondary/50 transition-colors text-foreground"
-              >
-                <Settings size={20} />
-                <span className="font-medium">Settings</span>
-              </button>
-
-              <button 
-                onClick={() => { toggleDarkMode(); }}
-                className="w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-secondary/50 transition-colors text-foreground"
-              >
-                <div className="flex items-center gap-3">
-                  {isDark ? <Sun size={20} /> : <Moon size={20} />}
-                  <span className="font-medium">Dark Mode</span>
-                </div>
-                <div className={`w-10 h-6 rounded-full p-0.5 transition-all ${isDark ? "bg-primary" : "bg-muted"}`}>
-                  <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${isDark ? "translate-x-4" : "translate-x-0"}`} />
-                </div>
-              </button>
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* Mobile bottom nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-nav pb-[env(safe-area-inset-bottom)]">
-        <div className="flex items-center justify-around px-2 py-1.5">
-          {navItems.slice(0, 5).map(({ href, label, id, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${
-                activeId === id ? "text-primary" : "text-muted-foreground"
-              }`}
-            >
-              <div
-                className={`p-2 rounded-xl transition-all duration-300 ${
-                  activeId === id ? "bg-primary/15 scale-110" : "hover:bg-secondary/50"
-                }`}
-              >
-                <Icon size={20} />
-              </div>
-              <span className="text-[10px] font-semibold">{label}</span>
-            </Link>
-          ))}
-          <Link
-            href="/profile"
-            className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all ${
-              pathname === "/profile" ? "text-primary" : "text-muted-foreground"
-            }`}
-          >
-            <div className={`w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-[10px] font-bold text-primary-foreground transition-all ${pathname === "/profile" ? "scale-110 ring-2 ring-primary/30" : ""}`}>
-              EB
-            </div>
-            <span className="text-[10px] font-semibold">Profile</span>
-          </Link>
-        </div>
-      </nav>
-
-      {/* Search modal */}
-      {searchOpen && (
-        <>
-          <div 
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 animate-fade-in"
-            onClick={() => setSearchOpen(false)}
-          />
-          <div className="fixed top-20 left-1/2 -translate-x-1/2 w-full max-w-lg px-4 z-50 animate-slide-down">
-            <div className="glass-card rounded-2xl shadow-2xl overflow-hidden">
-              <div className="flex items-center gap-3 p-4">
-                <Search size={20} className="text-muted-foreground" />
-                <input
-                  autoFocus
-                  type="text"
-                  placeholder="Search Vitalia..."
-                  className="flex-1 bg-transparent outline-none text-foreground placeholder:text-muted-foreground"
-                />
-                <button 
-                  onClick={() => setSearchOpen(false)}
-                  className="p-1.5 rounded-lg hover:bg-secondary/50 transition-colors"
+              <div className="border-t border-border mt-2 pt-2">
+                <a
+                  href="https://wa.me/213780229481"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary w-full text-center block"
+                  onClick={() => setIsOpen(false)}
                 >
-                  <X size={18} className="text-muted-foreground" />
-                </button>
+                  اتصل عبر واتساب
+                </a>
               </div>
-              <div className="border-t border-border/50 p-4">
-                <p className="text-xs text-muted-foreground mb-3">Quick Links</p>
-                <div className="space-y-1">
-                  {["Dashboard", "My Progress", "AI Coach", "Shop"].map((item) => (
-                    <button 
-                      key={item}
-                      onClick={() => setSearchOpen(false)}
-                      className="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-secondary/50 transition-colors text-left"
-                    >
-                      <Search size={14} className="text-muted-foreground" />
-                      <span className="text-sm text-foreground">{item}</span>
-                    </button>
-                  ))}
+              <div className="grid grid-cols-1 gap-2 mt-2 text-sm">
+                <a
+                  href="tel:+213780229481"
+                  className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+                >
+                  <Phone size={16} />
+                  0780229481
+                </a>
+                <a
+                  href="mailto:okbaservices09@gmail.com"
+                  className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors break-all"
+                >
+                  <Mail size={16} />
+                  okbaservices09@gmail.com
+                </a>
+                <div className="flex items-start gap-2 text-muted-foreground">
+                  <MapPin size={16} className="flex-shrink-0 mt-0.5" />
+                  <span>باب الجزائر، البليدة</span>
                 </div>
               </div>
             </div>
           </div>
-        </>
-      )}
-
-      {/* Settings Modal */}
-      <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
-    </>
+        )}
+      </div>
+    </nav>
   )
 }
